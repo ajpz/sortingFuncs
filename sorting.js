@@ -10,6 +10,7 @@ function swap(arr, idx1, idx2) {
 }
 
 var quickSort = function(array) {
+	console.log('qs called with ', array); 
 	if(array.length < 2) return array; 
 
 	var pivotIndex = -1;
@@ -20,7 +21,11 @@ var quickSort = function(array) {
 
 	while(!swapped) {
 		pivotIndex++; 
-		if(pivotIndex === array.length-1) return array;  
+		if(pivotIndex === array.length-1) {
+			console.log('returned sorted array'); 
+			// debugger; 
+			return array;  
+		}
 		var headIndex = pivotIndex + 1; 
 		console.log('qs called: ', array, 'hidx: ' + headIndex, 'pidx: ' + pivotIndex); 
 		for(var i = headIndex; i < array.length; i++) {
@@ -31,19 +36,13 @@ var quickSort = function(array) {
 			}
 		}
 	} 
-	// console.log()
 	swap(array, pivotIndex, headIndex - 1); 
-	ltArr = array.slice(0, headIndex-1); 
-	gtArr = array.slice(headIndex-1); 
+	var ltArr = array.slice(0, headIndex-1); 
+	var gtArr = array.slice(headIndex-1); 
+	console.log("Just finished swap, about to call: ", ltArr, gtArr); 
+	// debugger; 
 	return quickSort(ltArr).concat(quickSort(gtArr)); 
 }
-
-// 0, 1, 2, 3, 4, 5, 6, 7 
-
-
-
-
-
 
 /***************************************/
 /* bubblerSort  										   */
@@ -59,6 +58,7 @@ var bubbleSort = function(arr,output) {
 	// ... and add escape condition to the
 	// ... for loop condition directly. Then 
 	// ... you only have a single return. 
+	// Can use a function call instead. 				
 	for (var i = 0; i < arr.length - 1; i++) {
 		for (var j = 0; j < arr.length - 1 - i; j++) {
 			counter++; 
@@ -81,13 +81,26 @@ var bubbleSort = function(arr,output) {
 
 this.counter = 0;
 var merge = function(arr1,arr2){
+	//Don't use shift here - kills O(n) and becomes O(n^2)
 	 var result = [];
+	 var leftIdx = 0; 
+	 var rightIdx = 0; 
 
-	 while(arr1.length > 0 && arr2.length >0){
-	 		if(arr1[0] > arr2[0]) result.push(arr2.shift());
-	 		else result.push(arr1.shift());
+	 // while(arr1.length > 0 && arr2.length >0){
+	 // 		if(arr1[0] > arr2[0]) result.push(arr2.shift());
+	 // 		else result.push(arr1.shift());
+	 // }
+
+	 while(leftIdx < arr1.length || rightIdx < arr2.length) {
+	 	if(arr1[leftIdx] < arr2[rightIdx] || arr2[rightIdx] === undefined) {
+	 		result.push(arr1[leftIdx]); 
+	 		leftIdx++; 	
+	 	} else {
+	 		result.push(arr2[rightIdx]); 
+	 		rightIdx++; 
+	 	}
 	 }
-	 return result.concat(arr1).concat(arr2);
+	 return result;
 }
 
 //expects arrays of length 2+
@@ -103,13 +116,14 @@ var split = function(array){
 function mergeSort(array) {
 	// console.log(array);
 	if(array.length < 2) return array;
-	var initialLength = array.length;
 	var splitArray = split(array)
 	return	merge(mergeSort(splitArray[0]),mergeSort(splitArray[1]));
 }
 
 
 //**********************************
+// Run the following code by calling file in node. 
+// Be sure to invoke run(); 
 function run() {	
 	for(var i=12; i <= 17; i++) {
 	    var num_items = Math.pow(2,i);
@@ -136,6 +150,8 @@ function run() {
     console.timeEnd(num_items + " merge");  
   }
 }
+
+//run()
 
  
 
